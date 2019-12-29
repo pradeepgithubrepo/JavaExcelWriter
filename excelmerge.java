@@ -45,23 +45,19 @@ public class excel_mrg {
 		try
 		{
 			Newworkbook = new XSSFWorkbook();
-			file = new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file.xlsx"));
-			oldworkbook = new XSSFWorkbook(file);
+			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file.xlsx")));
 			preProcessor();
 
 
-			file = new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file1.xlsx"));
-			oldworkbook = new XSSFWorkbook(file);
+			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file1.xlsx")));
 			preProcessor();
 
-			file = new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/temp.xlsx"));
-			oldworkbook = new XSSFWorkbook(file);
+			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/temp.xlsx")));
 			preProcessor();
 
 			FileOutputStream fileOut = new FileOutputStream("/Users/pradeepp/Desktop/javasam/rob_max.xlsx");
 			Newworkbook.write(fileOut);
 			fileOut.close();
-			file.close();
 		} 
 		catch (Exception e) 
 		{
