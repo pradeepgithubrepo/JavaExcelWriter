@@ -1,6 +1,4 @@
 package com.prad.test;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.*;
@@ -8,19 +6,12 @@ import java.io.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import java.io.FileOutputStream;
-import java.io.IOException;
-
-import org.apache.poi.ss.usermodel.Cell;  
-import org.apache.poi.ss.usermodel.CellStyle;  
-import org.apache.poi.ss.usermodel.FillPatternType;  
-import org.apache.poi.ss.usermodel.IndexedColors;  
-import org.apache.poi.ss.usermodel.Row;  
-import org.apache.poi.ss.usermodel.Sheet;  
-import org.apache.poi.ss.usermodel.Workbook;  
+import java.io.IOException;  
 
 public class excel_mrg {
 	// Flags to control writing to Excel
 	public static int rowNum = 1;
+	public static int headerflag = 0;
 	public static int cellcounter = 0;
 
 	public static Sheet sheet = null;
@@ -45,15 +36,17 @@ public class excel_mrg {
 		try
 		{
 			Newworkbook = new XSSFWorkbook();
+			headerStyleSetup();
+			headerflag = 1;
 			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file.xlsx")));
 			preProcessor();
 
-
+			headerflag = 1;
 			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/poi-generated-file1.xlsx")));
 			preProcessor();
 
-			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/temp.xlsx")));
-			preProcessor();
+//			oldworkbook = new XSSFWorkbook(new FileInputStream(new File("/Users/pradeepp/Desktop/javasam/temp.xlsx")));
+//			preProcessor();
 
 			FileOutputStream fileOut = new FileOutputStream("/Users/pradeepp/Desktop/javasam/rob_max.xlsx");
 			Newworkbook.write(fileOut);
@@ -75,6 +68,17 @@ public class excel_mrg {
 			newTabProcessor();
 		}
 	}
+	
+	public static void headerStyleSetup() {
+		style = Newworkbook.createCellStyle();  
+        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());  
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND); 	
+        Font headerFont = Newworkbook.createFont();
+		headerFont.setBold(true);
+		headerFont.setFontHeightInPoints((short) 14);
+		style.setFont(headerFont);
+	}
+	
 	public static void newTabProcessor() {
 		Iterator<Row> rowIterator = sheet.iterator();
 		while (rowIterator.hasNext()) 
@@ -102,9 +106,14 @@ public class excel_mrg {
 					NewcellRow.setCellValue(cell.getStringCellValue());
 					break;
 				}
-				CellStyle newStyle = Newworkbook.createCellStyle();
-				newStyle.cloneStyleFrom(cell.getCellStyle());
-				NewcellRow.setCellStyle(newStyle);
+				if(headerflag == 1) {
+					CellStyle newStyle = Newworkbook.createCellStyle();
+					newStyle.cloneStyleFrom(cell.getCellStyle());
+					NewcellRow.setCellStyle(newStyle);
+					headerflag=0;
+					
+				}
+
 			}
 		}
 	}
